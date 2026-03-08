@@ -9,8 +9,8 @@
 - [x] 实现 /sit 命令
 - [x] 实现管理员配置文件与管理命令
 - [x] 清理模板代码并完善构建配置
-- [ ] 添加 GitHub Actions 构建与基于 tag 的 Release 发布
-- [ ] 编写中文 README
-- [ ] 编写英文 README_EN
-- [ ] 编写 AGENTS.md
-- [ ] 完成构建验证
+- [x] 添加 GitHub Actions 构建与基于 tag 的 Release 发布
+- [x] 编写中文 README
+- [x] 编写英文 README_EN
+- [x] 编写 AGENTS.md
+- [x] 完成构建验证

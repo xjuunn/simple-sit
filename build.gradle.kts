@@ -65,6 +65,7 @@ val releaseFileBase = providers.provider {
 
 tasks.named<Jar>("jar") {
     archiveBaseName.set(releaseFileBase)
+    archiveVersion.set("")
     from("LICENSE") {
         rename { "${it}_${base.archivesName.get()}" }
     }
@@ -72,16 +73,19 @@ tasks.named<Jar>("jar") {
 
 tasks.named<Jar>("sourcesJar") {
     archiveBaseName.set(releaseFileBase)
+    archiveVersion.set("")
     archiveClassifier.set("sources")
 }
 
 tasks.named<AbstractArchiveTask>("remapSourcesJar") {
     archiveBaseName.set(releaseFileBase)
+    archiveVersion.set("")
     archiveClassifier.set("sources")
 }
 
 tasks.named<RemapJarTask>("remapJar") {
     archiveBaseName.set(releaseFileBase)
+    archiveVersion.set("")
     archiveClassifier.set("")
 }
 
