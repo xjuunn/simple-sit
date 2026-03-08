@@ -1,6 +1,6 @@
 # Simple Sit
 
-`Simple Sit` 是一个面向 Fabric 服务端的极简坐下模组，允许玩家通过右键或命令在常见方块上坐下，不需要复杂的 UI，也不要求玩家拥有 OP 权限。
+`Simple Sit` 是一个面向 Fabric 的极简坐下模组，允许玩家通过右键或命令在常见方块上坐下，不需要复杂的界面，也不要求普通玩家拥有 OP 权限。
 
 English documentation: [README_EN.md](README_EN.md)
 
@@ -8,14 +8,14 @@ English documentation: [README_EN.md](README_EN.md)
 
 - 右键地毯坐下
 - 右键楼梯坐下
-- 可选支持台阶与床
-- 使用隐藏座位实体实现坐下，不残留可见实体
-- 同一坐标自动占用检测，避免多人重叠坐下
-- 潜行起身
+- 可选支持台阶和床
+- 使用隐藏 Seat 实体实现坐下
+- 自动检测座位占用，避免多人重叠坐下
+- 按 `Shift` 起身
 - 玩家尝试移动或跳跃时自动起身
-- `/sit` 原地坐下
-- 管理员通过命令和配置文件控制功能开关
-- 服务端优先设计，多人服务器通常只需要服务端安装
+- 提供 `/sit` 原地坐下命令
+- 管理员可通过命令和配置文件控制行为
+- 服务端优先设计，适合多人服务器使用
 
 ## 依赖
 
@@ -73,14 +73,14 @@ English documentation: [README_EN.md](README_EN.md)
 | 命令 | 说明 |
 | --- | --- |
 | `/sitadmin reload` | 重新加载配置文件 |
-| `/sitadmin set enabled <true|false>` | 开关模组 |
-| `/sitadmin set requireSneakRightClick <true|false>` | 是否必须潜行右键才能坐下 |
-| `/sitadmin set requireEmptyHand <true|false>` | 是否必须空手右键 |
-| `/sitadmin set allowStairs <true|false>` | 是否允许楼梯坐下 |
-| `/sitadmin set allowCarpets <true|false>` | 是否允许地毯坐下 |
-| `/sitadmin set allowSlabs <true|false>` | 是否允许台阶坐下 |
-| `/sitadmin set allowBeds <true|false>` | 是否允许床坐下 |
-| `/sitadmin set allowCommandSit <true|false>` | 是否允许 `/sit` |
+| `/sitadmin set enabled <true\|false>` | 开启或关闭模组 |
+| `/sitadmin set requireSneakRightClick <true\|false>` | 是否必须潜行右键才能坐下 |
+| `/sitadmin set requireEmptyHand <true\|false>` | 是否必须空手右键 |
+| `/sitadmin set allowStairs <true\|false>` | 是否允许楼梯坐下 |
+| `/sitadmin set allowCarpets <true\|false>` | 是否允许地毯坐下 |
+| `/sitadmin set allowSlabs <true\|false>` | 是否允许台阶坐下 |
+| `/sitadmin set allowBeds <true\|false>` | 是否允许床坐下 |
+| `/sitadmin set allowCommandSit <true\|false>` | 是否允许使用 `/sit` |
 
 ## 配置文件
 
@@ -105,9 +105,9 @@ English documentation: [README_EN.md](README_EN.md)
 
 ## 设计说明
 
-- 使用隐藏 `ArmorStand` 作为 Seat 实体，不额外注册网络实体，兼容性更稳
-- 坐下逻辑运行在服务端，适合多人服务器统一控制
-- 右键坐下默认要求主手交互，减少与其他行为冲突
+- 使用隐藏 `ArmorStand` 作为 Seat 实体，不额外注册自定义网络实体，兼容性更稳
+- 核心逻辑运行在服务端，适合多人服务器统一控制
+- 默认使用主手交互，减少和其他交互行为的冲突
 - 提供 `requireEmptyHand` 和 `requireSneakRightClick` 两个配置项，方便服主快速调整误触策略
 
 ## 构建
@@ -143,9 +143,9 @@ git push origin v1.0.0
 
 在 GitHub 的 `Actions` 页面中运行 `release` 工作流，并填写目标 tag。
 
-## 开发状态
+## 当前状态
 
-当前版本已完成以下基础能力：
+当前版本已经完成：
 
 - 坐下交互
 - Seat 自动清理

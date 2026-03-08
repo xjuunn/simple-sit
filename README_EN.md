@@ -2,7 +2,7 @@
 
 `Simple Sit` is a minimal Fabric mod focused on clean sitting interactions. It allows players to sit on common blocks with a right click or a command, without requiring OP for normal use.
 
-中文文档: [README.md](README.md)
+Chinese documentation: [README.md](README.md)
 
 ## Features
 
