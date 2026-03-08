@@ -145,7 +145,7 @@ object SeatEntityManager {
         val seatInset = when (targetType) {
             SitTargetType.CARPET -> 0.04
             SitTargetType.STAIRS -> 0.32
-            SitTargetType.SLAB -> 0.28
+            SitTargetType.SLAB -> 0.12
             SitTargetType.BED -> 0.22
             SitTargetType.COMMAND -> 0.0
         }
