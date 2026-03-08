@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "simple-sit",
+  "version": "${version}",
+  "name": "Simple Sit",
+  "description": "Allow players to sit on carpets, stairs, slabs, beds, and with a command.",
+  "authors": [
+    "junhsiun"
+  ],
+  "contact": {
+    "sources": "https://github.com/junhsiun/simple-sit"
+  },
+  "license": "MIT",
+  "icon": "assets/simple-sit/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "com.junhsiun.SimpleSit",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": ">=${fabric_api_version}",
+    "fabric-language-kotlin": "*"
+  }
+}
