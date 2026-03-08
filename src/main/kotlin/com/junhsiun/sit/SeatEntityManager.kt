@@ -17,14 +17,12 @@ import java.util.UUID
 object SeatEntityManager {
     private const val SEAT_TAG = "simple_sit_seat"
     private const val ARMOR_STAND_PASSENGER_HEIGHT = 1.975
-    private const val MOVE_TO_STAND_GRACE_TICKS = 6
     private val seatedPlayers = HashMap<UUID, SeatSession>()
 
     data class SeatSession(
         val level: ServerLevel,
         val seatId: UUID,
-        val anchor: Vec3,
-        var seatedTicks: Int = 0
+        val anchor: Vec3
     )
 
     fun sitOnBlock(player: ServerPlayer, pos: BlockPos, state: BlockState): Boolean {
@@ -68,11 +66,8 @@ object SeatEntityManager {
                 continue
             }
 
-            session.seatedTicks++
-            val input = player.lastClientInput
-            val wantsToMove = input.forward() || input.backward() || input.left() || input.right() || input.jump()
-            val wantsToStand = session.seatedTicks > MOVE_TO_STAND_GRACE_TICKS && wantsToMove
-            if (player.isShiftKeyDown || wantsToStand || player.distanceToSqr(session.anchor) > 1.25) {
+            val horizontalDistance = Vec3(player.x, session.anchor.y, player.z).distanceToSqr(session.anchor)
+            if (player.isShiftKeyDown || horizontalDistance > 1.0) {
                 player.stopRiding()
                 cleanupSeat(session)
                 iterator.remove()
