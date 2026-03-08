@@ -143,7 +143,7 @@ object SeatEntityManager {
         val shape = state.getCollisionShape(level, pos)
         val topHeight = if (shape.isEmpty) 1.0 else shape.bounds().maxY
         val seatInset = when (targetType) {
-            SitTargetType.CARPET -> 0.18
+            SitTargetType.CARPET -> 0.04
             SitTargetType.STAIRS -> 0.32
             SitTargetType.SLAB -> 0.28
             SitTargetType.BED -> 0.22
@@ -155,8 +155,8 @@ object SeatEntityManager {
 
     private fun facingForTarget(player: ServerPlayer, state: BlockState, targetType: SitTargetType): Float {
         return when (targetType) {
-            SitTargetType.STAIRS -> if (state.block is StairBlock) state.getValue(StairBlock.FACING).toYRot() else player.yRot
-            SitTargetType.BED -> if (state.block is BedBlock) state.getValue(BedBlock.FACING).toYRot() else player.yRot
+            SitTargetType.STAIRS -> if (state.block is StairBlock) state.getValue(StairBlock.FACING).opposite.toYRot() else player.yRot
+            SitTargetType.BED -> if (state.block is BedBlock) state.getValue(BedBlock.FACING).opposite.toYRot() else player.yRot
             else -> player.yRot
         }
     }
