@@ -16,23 +16,26 @@ import java.util.UUID
 
 object SeatEntityManager {
     private const val SEAT_TAG = "simple_sit_seat"
+    private const val ARMOR_STAND_PASSENGER_HEIGHT = 1.975
+    private const val MOVE_TO_STAND_GRACE_TICKS = 6
     private val seatedPlayers = HashMap<UUID, SeatSession>()
 
     data class SeatSession(
         val level: ServerLevel,
         val seatId: UUID,
-        val anchor: Vec3
+        val anchor: Vec3,
+        var seatedTicks: Int = 0
     )
 
     fun sitOnBlock(player: ServerPlayer, pos: BlockPos, state: BlockState): Boolean {
         val targetType = resolveTargetType(state) ?: return false
-        val seatPos = seatPositionForBlock(pos, targetType)
+        val seatPos = seatPositionForBlock(player.level(), pos, state, targetType)
         val rotation = facingForTarget(player, state, targetType)
         return sit(player, seatPos, targetType, rotation)
     }
 
     fun sitInPlace(player: ServerPlayer): Boolean {
-        val seatPos = Vec3(player.x, player.y - 0.35, player.z)
+        val seatPos = Vec3(player.x, player.y - ARMOR_STAND_PASSENGER_HEIGHT, player.z)
         return sit(player, seatPos, SitTargetType.COMMAND, player.yRot)
     }
 
@@ -65,9 +68,10 @@ object SeatEntityManager {
                 continue
             }
 
+            session.seatedTicks++
             val input = player.lastClientInput
-            val moveIntent = player.lastClientMoveIntent
-            val wantsToStand = input.jump() || moveIntent.x != 0.0 || moveIntent.z != 0.0
+            val wantsToMove = input.forward() || input.backward() || input.left() || input.right() || input.jump()
+            val wantsToStand = session.seatedTicks > MOVE_TO_STAND_GRACE_TICKS && wantsToMove
             if (player.isShiftKeyDown || wantsToStand || player.distanceToSqr(session.anchor) > 1.25) {
                 player.stopRiding()
                 cleanupSeat(session)
@@ -139,15 +143,19 @@ object SeatEntityManager {
 
     private fun isSeatEntity(entity: ArmorStand): Boolean = entity.tags.contains(SEAT_TAG)
 
-    private fun seatPositionForBlock(pos: BlockPos, targetType: SitTargetType): Vec3 {
+    private fun seatPositionForBlock(level: ServerLevel, pos: BlockPos, state: BlockState, targetType: SitTargetType): Vec3 {
         val center = Vec3.atCenterOf(pos)
-        return when (targetType) {
-            SitTargetType.CARPET -> center.add(0.0, -0.55, 0.0)
-            SitTargetType.STAIRS -> center.add(0.0, -0.1, 0.0)
-            SitTargetType.SLAB -> center.add(0.0, -0.3, 0.0)
-            SitTargetType.BED -> center.add(0.0, -0.15, 0.0)
-            SitTargetType.COMMAND -> center.add(0.0, -0.35, 0.0)
+        val shape = state.getCollisionShape(level, pos)
+        val topHeight = if (shape.isEmpty) 1.0 else shape.bounds().maxY
+        val seatInset = when (targetType) {
+            SitTargetType.CARPET -> 0.18
+            SitTargetType.STAIRS -> 0.32
+            SitTargetType.SLAB -> 0.28
+            SitTargetType.BED -> 0.22
+            SitTargetType.COMMAND -> 0.0
         }
+        val riderFeetY = pos.y + topHeight - seatInset
+        return Vec3(center.x, riderFeetY - ARMOR_STAND_PASSENGER_HEIGHT, center.z)
     }
 
     private fun facingForTarget(player: ServerPlayer, state: BlockState, targetType: SitTargetType): Float {
